@@ -1,16 +1,11 @@
 import 'dotenv/config'
 import Fastify from 'fastify'
 import { submitForReview } from './submission.js'
-import citiesRoutes from './City API.js'
-import weatherRoutes from './Weather API.js'
 
-const fastify = Fastify({ logger: true })
+const fastify = Fastify({
+  logger: true,
+})
 
-// Enregistrement des routes
-fastify.register(citiesRoutes)
-fastify.register(weatherRoutes)
-
-// Lancement du serveur
 fastify.listen(
   {
     port: process.env.PORT || 3000,
