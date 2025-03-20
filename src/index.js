@@ -1,10 +1,12 @@
 import 'dotenv/config'
 import Fastify from 'fastify'
 import { submitForReview } from './submission.js'
+import citiesInfoRoute from './citiesInfo.js'
 
-const fastify = Fastify({
-  logger: true,
-})
+const fastify = Fastify({ logger: true })
+
+// Enregistrer la route pour récupérer les infos d'une ville
+fastify.register(citiesInfoRoute)
 
 fastify.listen(
   {
@@ -16,11 +18,11 @@ fastify.listen(
       fastify.log.error(err)
       process.exit(1)
     }
-
+    
     //////////////////////////////////////////////////////////////////////
     // Don't delete this line, it is used to submit your API for review //
     // everytime your start your server.                                //
     //////////////////////////////////////////////////////////////////////
-    submitForReview(fastify)
+    submitForReview(fastify) // Soumission automatique
   }
 )
