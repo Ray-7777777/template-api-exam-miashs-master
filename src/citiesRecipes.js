@@ -13,6 +13,7 @@ async function cityExists(cityId) {
 }
 
 export default async function citiesRecipesRoute(fastify, options) {
+  // Route pour ajouter une recette à une ville
   fastify.post('/cities/:cityId/recipes', async (request, reply) => {
     const { cityId } = request.params;
     const { content } = request.body;
@@ -63,5 +64,45 @@ export default async function citiesRecipesRoute(fastify, options) {
       id: recipeId,
       content
     });
+  });
+
+  // Route pour supprimer une recette d'une ville
+  fastify.delete('/cities/:cityId/recipes/:recipeId', async (request, reply) => {
+    const { cityId, recipeId } = request.params;
+
+    // Vérification de l'existence de la ville
+    if (!(await cityExists(cityId))) {
+      return reply.status(404).send({
+        statusCode: 404,
+        error: 'Not Found',
+        message: `City ${cityId} not found`
+      });
+    }
+
+    // Vérification si la ville contient des recettes
+    if (!cityRecipes[cityId] || cityRecipes[cityId].length === 0) {
+      return reply.status(404).send({
+        statusCode: 404,
+        error: 'Not Found',
+        message: `No recipes found for city ${cityId}`
+      });
+    }
+
+    // Recherche de la recette à supprimer
+    const recipeIndex = cityRecipes[cityId].findIndex(recipe => recipe.id === parseInt(recipeId));
+
+    if (recipeIndex === -1) {
+      return reply.status(404).send({
+        statusCode: 404,
+        error: 'Not Found',
+        message: `Recipe with id ${recipeId} not found`
+      });
+    }
+
+    // Suppression de la recette
+    cityRecipes[cityId].splice(recipeIndex, 1);
+
+    // Réponse avec code de statut 204 pour "No Content"
+    return reply.status(204).send();
   });
 }
