@@ -39,10 +39,7 @@ async function getCityInfo(cityId) {
     id: cityId,
     name: cityData.name,
     country: cityData.country,
-    coordinates: {
-      latitude: cityData.coordinates.latitude,
-      longitude: cityData.coordinates.longitude,
-    },
+    coordinates: [cityData.coordinates.latitude, cityData.coordinates.longitude],
     population: cityData.population,
     knownFor: cityData.knownFor || [],
     weatherPredictions: formattedWeather.slice(0, 2), // Prend today & tomorrow
