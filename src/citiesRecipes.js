@@ -8,8 +8,13 @@ const cityRecipes = {};
 
 // Fonction pour récupérer les villes existantes
 async function cityExists(cityId) {
-  const response = await fetch(`${API_URL}/cities/${cityId}/insights?apiKey=${API_KEY}`);
-  return response.ok;
+  try {
+    const response = await fetch(`${API_URL}/cities/${cityId}/insights?apiKey=${API_KEY}`);
+    return response.ok;
+  } catch (error) {
+    console.error("Error checking city:", error);
+    return false;  // Return false if the request fails
+  }
 }
 
 export default async function citiesRecipesRoute(fastify, options) {
